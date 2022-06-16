@@ -6,23 +6,23 @@ const Produto = new Schema({
   idProduto: {
     type: Number
   },
-  nome: {
+  nomeProduto: {
     type: String,
     required: true
   },
-  valor: {
+  valorProduto: {
     type: Number,
     required: true
   },
-  categoria: {
+  categoriaProduto: {
     type: String,
     required: true
   },
-  descricao: {
+  descricaoProduto: {
     type: String,
     required: false
   },
-  imagem: {
+  imagemProduto: {
     type: String,
     required: false
   }

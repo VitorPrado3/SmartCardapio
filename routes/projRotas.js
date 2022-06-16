@@ -10,11 +10,11 @@ router.post('/produto', async (req, res) => {
     const { nome, valor, categoria, descricao, imagem } = req.body
 
     let produto = {
-        nome: nome,
-        valor: valor,
-        categoria: categoria,
-        descricao: descricao,
-        imagem: imagem
+        nomeProduto: nome,
+        valorProduto: valor,
+        categoriaProduto: categoria,
+        descricaoProduto: descricao,
+        imagemProduto: imagem
     }
 
     if (!nome) {
@@ -32,6 +32,13 @@ router.post('/produto', async (req, res) => {
         return
     }
 
+    const produtoAntigo = await Produto.findOne({ nomeProduto: nome }).exec()
+
+    if(produtoAntigo?._doc){
+        res.status(422).json({ message: `Produto ${nome} já está cadastrado!` })
+        return 
+    }
+    
     try {
 
         await Produto.create(produto)
@@ -41,7 +48,7 @@ router.post('/produto', async (req, res) => {
         res.status(500).json({ erro: erro })
         return
     }
-
+    
 })
 
 router.get('/produtos', async (req, res) => {
@@ -79,6 +86,29 @@ router.get('/produto/:id', async (req, res) => {
 
 })
 
+router.get('/categoria/:categoria', async (req, res) => {
+
+    const categoriaParam = req.params.categoria
+
+    try {
+
+        const produtoPorCategoria = await Produto.find({ categoriaProduto: categoriaParam }).exec()
+
+        if (produtoPorCategoria.length == 0) {
+            res.status(404).json({ message: `Categoria de ${categoriaParam} não encontrada` })
+            return
+        }
+
+        res.status(200).json(produtoPorCategoria)
+        return
+    } catch (erro) {
+
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+})
+
 router.patch('/produto/:id', async (req, res) => {
 
     const id = req.params.id
@@ -92,11 +122,11 @@ router.patch('/produto/:id', async (req, res) => {
     }
 
     const produtoNovo = {
-        nome: nome || produtoAntigo.nome,
-        valor: valor || produtoAntigo.valor,
-        categoria: categoria || produtoAntigo.categoria,
-        descricao: descricao || produtoAntigo.descricao,
-        imagem: imagem || produtoAntigo.imagem
+        nomeProduto: nome || produtoAntigo.nome,
+        valorProduto: valor || produtoAntigo.valor,
+        categoriaProduto: categoria || produtoAntigo.categoria,
+        descricaoProduto: descricao || produtoAntigo.descricao,
+        imagemProduto: imagem || produtoAntigo.imagem
     }
 
     try {
