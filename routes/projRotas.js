@@ -7,40 +7,40 @@ const Usuario = require('../models/Usuario');
 
 router.post('/produto', async (req, res) => {
 
-    const { nome, valor, categoria, descricao, imagem } = req.body
+    const { nomeProduto, valorProduto, categoriaProduto, descricaoProduto, imagemProduto } = req.body
 
     let produto = {
-        nomeProduto: nome,
-        valorProduto: valor,
-        categoriaProduto: categoria,
-        descricaoProduto: descricao,
-        imagemProduto: imagem
+        nomeProduto: nomeProduto,
+        valorProduto: valorProduto,
+        categoriaProduto: categoriaProduto,
+        descricaoProduto: descricaoProduto,
+        imagemProduto: imagemProduto
     }
 
     if (!nome) {
-        res.status(422).json({ erro: 'Campo nome é requerido' })
+        res.status(400).json({ erro: 'Campo nome é requerido' })
         return
     }
 
     if (!valor) {
-        res.status(422).json({ erro: 'Campo valor é requerido' })
+        res.status(400).json({ erro: 'Campo valor é requerido' })
         return
     }
 
     if (!imagem) {
-        res.status(422).json({ erro: 'Campo imagem é requerido' })
+        res.status(400).json({ erro: 'Campo imagem é requerido' })
         return
     }
 
-    const produtoAntigo = await Produto.findOne({ nomeProduto: nome }).exec()
+    const produtoAntigo = await Produto.findOne({ nomeProduto: nomeProduto }).exec()
 
     if(produtoAntigo?._doc){
-        res.status(422).json({ message: `Produto ${nome} já está cadastrado!` })
+        res.status(422).json({ message: `Produto ${nomeProduto} já está cadastrado!` })
         return 
     }
     
     try {
-
+        
         await Produto.create(produto)
         res.status(201).json({ produto, message: 'Produto cadastrado!' })
         return
@@ -65,11 +65,11 @@ router.get('/produtos', async (req, res) => {
 
 router.get('/produto/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idProduto = req.params.id
 
     try {
 
-        const produto = await Produto.findOne({ idProduto: id })
+        const produto = await Produto.findOne({ idProduto: idProduto })
 
         if (!produto) {
             res.status(404).json({ message: `Produto ${idProduto} não encontrado` })
@@ -111,10 +111,10 @@ router.get('/categoria/:categoria', async (req, res) => {
 
 router.patch('/produto/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idProduto = req.params.id
     const { nome, valor, categoria, descricao, imagem } = req.body
 
-    const produtoAntigo = await Produto.findOne({ idProduto: id })
+    const produtoAntigo = await Produto.findOne({ idProduto: idProduto })
 
     if (!produtoAntigo) {
         res.status(404).json({ erro: `Produto ${idProduto} não encontrado` })
@@ -131,7 +131,7 @@ router.patch('/produto/:id', async (req, res) => {
 
     try {
 
-        await Produto.updateOne({ idProduto: id }, produtoNovo)
+        await Produto.updateOne({ idProduto: idProduto }, produtoNovo)
 
         // if (produtoCancelado.matchedCount === 0) {
         //     res.status(404).json({ erro: `Produto ${id} não encontrado` })
@@ -149,9 +149,9 @@ router.patch('/produto/:id', async (req, res) => {
 
 router.delete('/produto/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idProduto = req.params.id
 
-    const produto = await Produto.findOne({ idProduto: id })
+    const produto = await Produto.findOne({ idProduto: idProduto })
 
     if (!produto) {
         res.status(404).json({ message: `Produto não encontrado` })
@@ -160,7 +160,7 @@ router.delete('/produto/:id', async (req, res) => {
 
     try {
 
-        await Produto.deleteOne({ idProduto: id })
+        await Produto.deleteOne({ idProduto: idProduto })
 
         res.status(200).json({ produto, message: 'Produto removido' })
         return
@@ -220,9 +220,9 @@ router.get('/pedidos', async (req, res) => {
 
 router.patch('/cancelarPedido/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idPedido = req.params.id
 
-    const pedidoAntigo = await Pedido.findOne({ idPedido: id })
+    const pedidoAntigo = await Pedido.findOne({ idPedido: idPedido })
 
     if (!pedidoAntigo) {
         res.status(404).json({ erro: `Pedido ${idPedido} não encontrado` })
@@ -235,7 +235,7 @@ router.patch('/cancelarPedido/:id', async (req, res) => {
 
     try {
 
-        await Pedido.updateOne({ idPedido: id }, pedidoNovo)
+        await Pedido.updateOne({ idPedido: idPedido }, pedidoNovo)
 
         res.status(200).json({ message: "Pedido cancelado" })
         return
@@ -248,9 +248,9 @@ router.patch('/cancelarPedido/:id', async (req, res) => {
 
 router.delete('/pedido/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idPedido = req.params.id
 
-    const pedido = await Pedido.findOne({ idPedido: id })
+    const pedido = await Pedido.findOne({ idPedido: idPedido })
 
     if (!pedido) {
         res.status(404).json({ message: `Pedido não encontrado` })
@@ -259,7 +259,7 @@ router.delete('/pedido/:id', async (req, res) => {
 
     try {
 
-        await Pedido.deleteOne({ id: id })
+        await Pedido.deleteOne({ idPedido: idPedido })
 
         res.status(200).json({ pedido, message: 'Pedido removido' })
         return
@@ -316,14 +316,14 @@ router.get('/usuarios', async (req, res) => {
 
 router.get('/usuario/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idUsuario = req.params.id
 
     try {
 
-        const usuario = await Usuario.findOne({ idUsuario: id })
+        const usuario = await Usuario.findOne({ idUsuario: idUsuario })
 
         if (!usuario) {
-            res.status(404).json({ message: `Usuário ${id} não encontrado` })
+            res.status(404).json({ message: `Usuário ${idUsuario} não encontrado` })
             return
         }
 
@@ -339,13 +339,13 @@ router.get('/usuario/:id', async (req, res) => {
 
 router.patch('/usuario/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idUsuario = req.params.id
     const { user, senha, tipo } = req.body
 
-    const usuarioAntigo = await Usuario.findOne({ idUsuario: id })
+    const usuarioAntigo = await Usuario.findOne({ idUsuario: idUsuario })
 
     if (!usuarioAntigo) {
-        res.status(404).json({ erro: `Usuário ${id} não encontrado` })
+        res.status(404).json({ erro: `Usuário ${idUsuario} não encontrado` })
         return
     }
 
@@ -357,7 +357,7 @@ router.patch('/usuario/:id', async (req, res) => {
 
     try {
 
-        await Usuario.updateOne({ idUsuario: id }, usuarioNovo)
+        await Usuario.updateOne({ idUsuario: idUsuario }, usuarioNovo)
 
         res.status(200).json({ usuarioNovo, message: 'Usuário editado!' })
         return
@@ -370,18 +370,18 @@ router.patch('/usuario/:id', async (req, res) => {
 
 router.delete('/usuario/:id', async (req, res) => {
 
-    const id = req.params.id
+    const idUsuario = req.params.id
 
-    const usuario = await Usuario.findOne({ idUsuario: id })
+    const usuario = await Usuario.findOne({ idUsuario: idUsuario })
 
     if (!usuario) {
-        res.status(404).json({ message: `Usuário ${id} não encontrado` })
+        res.status(404).json({ message: `Usuário ${idUsuario} não encontrado` })
         return
     }
 
     try {
 
-        await Usuario.deleteOne({ idUsuario: id })
+        await Usuario.deleteOne({ idUsuario: idUsuario })
 
         res.status(200).json({ message: `Usuário ${usuario.user} removido` })
         return
