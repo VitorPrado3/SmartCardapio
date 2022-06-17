@@ -11,7 +11,7 @@ app.use(
 
 app.use(express.json())
 
-const projRotas = require ('./routes/projRotas')
+const projRotas = require ('./routes/routes')
 
 app.use(projRotas)
 

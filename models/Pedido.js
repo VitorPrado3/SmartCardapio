@@ -3,7 +3,7 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 Schema = mongoose.Schema;
 
 const Pedido = new Schema({
-  id: {
+  idPedido: {
     type: Number
   },
   listaProd: {

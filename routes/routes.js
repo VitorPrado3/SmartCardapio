@@ -17,17 +17,17 @@ router.post('/produto', async (req, res) => {
         imagemProduto: imagemProduto
     }
 
-    if (!nome) {
+    if (!nomeProduto) {
         res.status(400).json({ erro: 'Campo nome é requerido' })
         return
     }
 
-    if (!valor) {
+    if (!valorProduto) {
         res.status(400).json({ erro: 'Campo valor é requerido' })
         return
     }
 
-    if (!imagem) {
+    if (!imagemProduto) {
         res.status(400).json({ erro: 'Campo imagem é requerido' })
         return
     }
@@ -184,12 +184,12 @@ router.post('/pedido', async (req, res) => {
     }
 
     if (!listaProd) {
-        res.status(422).json({ erro: 'Pedido vazio' })
+        res.status(400).json({ erro: 'Pedido vazio' })
         return
     }
 
     if (!mesa) {
-        res.status(422).json({ erro: 'Número da mesa é requerido' })
+        res.status(400).json({ erro: 'Número da mesa é requerido' })
         return
     }
 
