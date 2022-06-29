@@ -1,7 +1,8 @@
 const express = require('express');
+const cors = require('cors')
 const app = express();
 const mongoose = require('mongoose');
-require('dotenv').config(); 
+require('dotenv').config();
 
 app.use(
     express.urlencoded({
@@ -11,17 +12,22 @@ app.use(
 
 app.use(express.json())
 
-const projRotas = require ('./routes/routes')
+app.use(cors({
+    origin: 'http://localhost:8080',
+    optionsSuccessStatus: 200
+}))
+
+const projRotas = require('./routes/routes')
 
 app.use(projRotas)
 
 mongoose.connect(
     process.env.URL_BANCO
 )
-.then(() => {
-    
-    console.log('Conectou no banco')
-    app.listen(3000)
+    .then(() => {
 
-})
-.catch((err) => console.log(err))
+        console.log('Conectou no banco')
+        app.listen(3000)
+
+    })
+    .catch((err) => console.log(err))
