@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon ./index.js localhost 3000",
+    "asd": "nodemon ./chamadas.js localhost 3001",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.27.2",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
     "mongoose": "^6.2.9",
