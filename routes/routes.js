@@ -3,7 +3,9 @@ const Produto = require('../models/Produto');
 const Pedido = require('../models/Pedido');
 const uuid = require('uuid');
 const Usuario = require('../models/Usuario');
-
+const moment = require('moment');
+const Estoque = require('../models/Estoque');
+moment.locale('pt-br');
 
 router.post('/produto', async (req, res) => {
 
@@ -49,6 +51,62 @@ router.post('/produto', async (req, res) => {
         return
     }
     
+})
+
+router.post('/estoque', async (req, res) => {
+
+    const { nomeProduto, quantidade } = req.body
+
+    let produto = {
+        nomeProduto: nomeProduto,
+        quantidadeProduto: quantidade,
+    }
+
+    if (!nomeProduto) {
+        res.status(400).json({ erro: 'Campo nome é requerido' })
+        return
+    }
+
+    if (!quantidade) {
+        res.status(400).json({ erro: 'Campo quantidade é requerido' })
+        return
+    }
+
+    const produtoAntigo = await Estoque.findOne({ nomeProduto: nomeProduto }).exec()
+
+    if(produtoAntigo?._doc){
+        
+        const novaQuantia = {
+            quantidadeProduto: produtoAntigo._doc.quantidadeProduto + quantidade
+        }
+
+        await Estoque.updateOne({ nomeProduto: nomeProduto }, novaQuantia)
+        res.status(201).json({ produto, message: 'Quantidade adicionada!' })
+        return
+    }
+    
+    try {
+        
+        await Estoque.create(produto)
+        res.status(201).json({ produto, message: 'Quantidade adicionada!' })
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
+    
+})
+
+router.get('/estoque', async (req, res) => {
+    try {
+
+        let produtos = await Estoque.find()
+
+        res.status(200).json(produtos)
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+    }
 })
 
 router.get('/produtos', async (req, res) => {
@@ -177,10 +235,15 @@ router.post('/pedido', async (req, res) => {
 
     const { listaProd, mesa } = req.body
 
+    // const agora =  Date.now()
+    // const agoraFormat = new Date(agora);
+
     let pedido = {
         listaProd: listaProd,
         mesa: mesa,
-        status: "Em preparo"
+        status: "Em preparo",
+        criacao: moment().format('DD/MM/YYYY HH:mm:ss'),
+        alteracao: moment().format('DD/MM/YYYY HH:mm:ss')
     }
 
     if (!listaProd) {
@@ -230,7 +293,8 @@ router.patch('/cancelarPedido/:id', async (req, res) => {
     }
 
     const pedidoNovo = {
-        status: "Cancelado"
+        status: "Cancelado",
+        alteracao: moment().format('DD/MM/YYYY HH:mm:ss')
     }
 
     try {
@@ -238,6 +302,78 @@ router.patch('/cancelarPedido/:id', async (req, res) => {
         await Pedido.updateOne({ idPedido: idPedido }, pedidoNovo)
 
         res.status(200).json({ message: "Pedido cancelado" })
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+})
+
+router.patch('/pedidoPronto/:id', async (req, res) => {
+
+    const idPedido = req.params.id
+
+    const pedidoAntigo = await Pedido.findOne({ idPedido: idPedido })
+
+    if (!pedidoAntigo) {
+        res.status(404).json({ erro: `Pedido ${idPedido} não encontrado` })
+        return
+    }
+
+    const pedidoNovo = {
+        status: "Pronto",
+        alteracao: moment().format('DD/MM/YYYY HH:mm:ss')
+    }
+
+    
+
+    const list = pedidoAntigo.listaProd
+
+    list.forEach( async item => {
+        const itemAntigo = await Estoque.findOne({ nomeProduto: item}).exec()
+
+        const estoque = {
+            quantidadeProduto: (itemAntigo.quantidadeProduto - 1)
+        }
+
+        await Estoque.updateOne({ nomeProduto: item}, estoque)
+    })
+
+    try {
+
+        await Pedido.updateOne({ idPedido: idPedido }, pedidoNovo)
+
+        res.status(200).json({ message: "Pedido pronto" })
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+})
+
+router.patch('/pedidoFinalizado/:id', async (req, res) => {
+
+    const idPedido = req.params.id
+
+    const pedidoAntigo = await Pedido.findOne({ idPedido: idPedido })
+
+    if (!pedidoAntigo) {
+        res.status(404).json({ erro: `Pedido ${idPedido} não encontrado` })
+        return
+    }
+
+    const pedidoNovo = {
+        status: "Finalizado",
+        alteracao: moment().format('DD/MM/YYYY HH:mm:ss')
+    }
+
+    try {
+
+        await Pedido.updateOne({ idPedido: idPedido }, pedidoNovo)
+
+        res.status(200).json({ message: "Pedido finalizado" })
         return
     } catch (erro) {
         res.status(500).json({ erro: erro })

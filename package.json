@@ -16,6 +16,7 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.17.3",
+    "moment": "^2.29.3",
     "mongoose": "^6.2.9",
     "mongoose-auto-increment": "^5.0.1",
     "mongoose-sequence": "^5.3.1",

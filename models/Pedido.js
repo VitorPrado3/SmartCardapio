@@ -17,7 +17,15 @@ const Pedido = new Schema({
   status: {
     type: String,
     required: true
-  }
+  },
+  criacao: {
+    type: String,
+    required: true
+  },
+  alteracao: {
+    type: String,
+    required: true
+  },
 })
 
 
