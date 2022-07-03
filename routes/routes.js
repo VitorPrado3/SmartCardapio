@@ -109,6 +109,35 @@ router.get('/estoque', async (req, res) => {
     }
 })
 
+router.patch('/estoque', async (req, res) => {
+
+    const { nomeProduto, quantidadeProduto } = req.body
+
+    const produtoAntigo = await Estoque.findOne({ nomeProduto: nomeProduto })
+
+    if (!produtoAntigo) {
+        res.status(404).json({ erro: `Produto ${nomeProduto} não encontrado no estoque` })
+        return
+    }
+
+    const produtoNovo = {
+        nomeProduto: nomeProduto || produtoAntigo.nomeProduto,
+        quantidadeProduto: quantidadeProduto + produtoAntigo.quantidadeProduto || produtoAntigo.quantidadeProduto
+    }
+
+    try {
+
+        await Estoque.updateOne({ nomeProduto: nomeProduto }, produtoNovo)
+
+        res.status(200).json(produtoNovo)
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+})
+
 router.get('/produtos', async (req, res) => {
     try {
 
