@@ -4,10 +4,47 @@ const Pedido = require('../models/Pedido');
 const uuid = require('uuid');
 const Usuario = require('../models/Usuario');
 const moment = require('moment');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const Estoque = require('../models/Estoque');
 moment.locale('pt-br');
 
-router.post('/produto', async (req, res) => {
+const JWT_SECRET = 'smartcardapio'
+const SALT_ROUNDS = 10
+const ADMIN_PATHS = [
+    '/produto',
+    '/usuarios'
+]
+
+const ADMIN_TYPE = 'admin'
+
+const authMiddleware = (req, res, next) => {
+
+    const token = req.header('authorization')?.split('Bearer ')[1]
+
+    if(!token){
+        res.status(400).json({ erro: 'Token é obrigatório' })
+        return
+    }
+
+    try{
+    const { tipo } = jwt.verify(token, JWT_SECRET)    
+    const path = req.path
+    const isAllowed = tipo == ADMIN_TYPE || !ADMIN_PATHS.includes(path)
+
+    if(!isAllowed){
+        res.status(401).json({ erro: 'Acesso não autorizado' })
+        return
+    }
+        next()
+    }catch(e){
+        // console.log(e)
+        res.status(401).json({ erro: 'Token inválido' })
+        return
+    }
+}
+
+router.post('/produto', authMiddleware, async (req, res) => {
 
     const { nomeProduto, valorProduto, categoriaProduto, descricaoProduto, imagemProduto } = req.body
 
@@ -361,19 +398,27 @@ router.patch('/pedidoPronto/:id', async (req, res) => {
         alteracao: moment().format('DD/MM/YYYY HH:mm:ss')
     }
 
-    const arrayProd = pedidoAntigo.listaProd
+    const arrayProd = Object.values(pedidoAntigo.listaProd)
 
-    arrayProd.forEach((item) => {
-        const estoqueAnt = Estoque.findOne({nomeProduto: item.nomeProduto}).exec()
-
-        const novoEstoque = {
-            nomeProduto: estoqueAnt.nomeProduto,
-            quantidade: estoqueAnt.quantidade - 1
+    for (const nomeProduto of arrayProd) {
+        const estoqueAnt = await Estoque.findOne({nomeProduto}).exec()
+        
+        if(!estoqueAnt){
+            res.status(404).json({ message: "Produto não encontrado" })
+            return
         }
 
-        Estoque.updateOne({nomeProduto: estoqueAnt.nomeProduto}, novoEstoque)
+        const novoEstoque = {
+            quantidadeProduto: estoqueAnt.quantidadeProduto - 1
+        }
+    
+        const result = await Estoque.updateOne({nomeProduto: estoqueAnt.nomeProduto}, novoEstoque)
 
-    })
+        if(!result?.matchedCount){
+            res.status(500).json({ message: "Falha ao atualizar o produto" })
+            return
+        }
+    }
 
     // const list = pedidoAntigo.listaProd
 
@@ -468,7 +513,7 @@ router.post('/usuario', async (req, res) => {
 
     const usuarioNovo = {
         "user": user,
-        "senha": senha,
+        "senha": bcrypt.hashSync(senha, SALT_ROUNDS),
         "tipo": tipo
     }
 
@@ -525,7 +570,7 @@ router.patch('/usuario/:id', async (req, res) => {
     const idUsuario = req.params.id
     const { user, senha, tipo } = req.body
 
-    const usuarioAntigo = await Usuario.findOne({ idUsuario: idUsuario })
+    const usuarioAntigo = await Usuario.findOne({ idUser: idUsuario })
 
     if (!usuarioAntigo) {
         res.status(404).json({ erro: `Usuário ${idUsuario} não encontrado` })
@@ -534,13 +579,12 @@ router.patch('/usuario/:id', async (req, res) => {
 
     const usuarioNovo = {
         user: user || usuarioAntigo.user,
-        senha: senha || usuarioNovo.senha,
+        senha: bcrypt.hashSync(senha ||  usuarioNovo.senha, SALT_ROUNDS),
         tipo: tipo || usuarioNovo.tipo
     }
-
     try {
 
-        await Usuario.updateOne({ idUsuario: idUsuario }, usuarioNovo)
+        await Usuario.updateOne({ idUser: idUsuario }, usuarioNovo)
 
         res.status(200).json({ usuarioNovo, message: 'Usuário editado!' })
         return
@@ -575,7 +619,7 @@ router.delete('/usuario/:id', async (req, res) => {
     }
 })
 
-router.get('/auth', async (req, res) => {
+router.post('/auth', async (req, res) => {
 
     const { user, senha } = req.body
 
@@ -584,12 +628,13 @@ router.get('/auth', async (req, res) => {
     if (!usuario) {
         res.status(404).json({ message: `Usuário ${user} não cadastrado!` })
         return
-    }
+    }   
 
     try {
 
-        if (user === usuario.user && senha === usuario.senha) {
-            res.status(204).json({message: "Ok"})
+        if (user === usuario.user && bcrypt.compareSync(senha, usuario.senha)) {
+            const token = jwt.sign({idUser: usuario.idUser, tipo: usuario.tipo}, JWT_SECRET)
+            res.status(200).json({message: "Ok", accessToken: token})
             return
         }
 

@@ -7,7 +7,7 @@ const Pedido = new Schema({
     type: Number
   },
   listaProd: {
-    type: Array,
+    type: [String],
     required: true
   },
   mesa: {
