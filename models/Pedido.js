@@ -26,6 +26,10 @@ const Pedido = new Schema({
     type: String,
     required: true
   },
+  autor: {
+    type: String,
+    required: true
+  },
 })
 
 

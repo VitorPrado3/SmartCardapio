@@ -262,7 +262,7 @@ router.delete('/produto/:id', async (req, res) => {
 
 router.post('/pedido', async (req, res) => {
 
-    const { listaProd, mesa } = req.body
+    const { listaProd, mesa, autor } = req.body
 
     // const agora =  Date.now()
     // const agoraFormat = new Date(agora);
@@ -272,7 +272,8 @@ router.post('/pedido', async (req, res) => {
         mesa: mesa,
         status: "Em preparo",
         criacao: moment().format('DD/MM/YYYY HH:mm:ss'),
-        alteracao: moment().format('DD/MM/YYYY HH:mm:ss')
+        alteracao: moment().format('DD/MM/YYYY HH:mm:ss'),
+        autor: autor
     }
 
     if (!listaProd) {
@@ -282,6 +283,11 @@ router.post('/pedido', async (req, res) => {
 
     if (!mesa) {
         res.status(400).json({ erro: 'Número da mesa é requerido' })
+        return
+    }
+
+    if (!autor) {
+        res.status(400).json({ erro: 'Autor é requerido' })
         return
     }
 
@@ -355,19 +361,31 @@ router.patch('/pedidoPronto/:id', async (req, res) => {
         alteracao: moment().format('DD/MM/YYYY HH:mm:ss')
     }
 
-    
+    const arrayProd = pedidoAntigo.listaProd
 
-    const list = pedidoAntigo.listaProd
+    arrayProd.forEach((item) => {
+        const estoqueAnt = Estoque.findOne({nomeProduto: item.nomeProduto}).exec()
 
-    list.forEach( async item => {
-        const itemAntigo = await Estoque.findOne({ nomeProduto: item}).exec()
-
-        const estoque = {
-            quantidadeProduto: (itemAntigo.quantidadeProduto - 1)
+        const novoEstoque = {
+            nomeProduto: estoqueAnt.nomeProduto,
+            quantidade: estoqueAnt.quantidade - 1
         }
 
-        await Estoque.updateOne({ nomeProduto: item}, estoque)
+        Estoque.updateOne({nomeProduto: estoqueAnt.nomeProduto}, novoEstoque)
+
     })
+
+    // const list = pedidoAntigo.listaProd
+
+    // list.forEach( async item => {
+    //     const itemAntigo = await Estoque.findOne({ nomeProduto: item}).exec()
+
+    //     const estoque = {
+    //         quantidadeProduto: (itemAntigo.quantidadeProduto - 1)
+    //     }
+
+    //     await Estoque.updateOne({ nomeProduto: item}, estoque)
+    // })
 
     try {
 
