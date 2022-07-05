@@ -1,8 +1,9 @@
 const router = require('express').Router()
 const Produto = require('../models/Produto');
 const Pedido = require('../models/Pedido');
-const uuid = require('uuid');
 const Usuario = require('../models/Usuario');
+const Fornecedor = require('../models/Fornecedor');
+
 const moment = require('moment');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -143,7 +144,7 @@ router.post('/estoque', authMiddleware, async (req, res) => {
     
 })
 
-router.get('/estoque', authMiddleware, async (req, res) => {
+router.get('/estoque', async (req, res) => {
     try {
 
         let produtos = await Estoque.find()
@@ -184,7 +185,7 @@ router.patch('/estoque', authMiddleware, async (req, res) => {
 
 })
 
-router.get('/produtos', authMiddleware, async (req, res) => {
+router.get('/produtos', async (req, res) => {
     try {
 
         let produtos = await Produto.find()
@@ -219,7 +220,7 @@ router.get('/produto/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.get('/categoria/:categoria', authMiddleware, async (req, res) => {
+router.get('/categoria/:categoria', async (req, res) => {
 
     const categoriaParam = req.params.categoria
 
@@ -265,12 +266,6 @@ router.patch('/produto/:id', authMiddleware, async (req, res) => {
     try {
 
         await Produto.updateOne({ idProduto: idProduto }, produtoNovo)
-
-        // if (produtoCancelado.matchedCount === 0) {
-        //     res.status(404).json({ erro: `Produto ${id} não encontrado` })
-
-        // }
-
         res.status(200).json(produtoNovo)
         return
     } catch (erro) {
@@ -349,7 +344,7 @@ router.post('/pedido', authMiddleware, async (req, res) => {
 
 })
 
-router.get('/pedidos', authMiddleware, async (req, res) => {
+router.get('/pedidos', async (req, res) => {
     try {
 
         let pedidos = await Pedido.find()
@@ -526,7 +521,7 @@ router.post('/usuario', authMiddleware, async (req, res) => {
 
 })
 
-router.get('/usuarios', authMiddleware, async (req, res) => {
+router.get('/usuarios', async (req, res) => {
     try {
 
         let usuarios = await Usuario.find()
@@ -539,7 +534,7 @@ router.get('/usuarios', authMiddleware, async (req, res) => {
     }
 })
 
-router.get('/usuario/:id', authMiddleware, async (req, res) => {
+router.get('/usuario/:id', async (req, res) => {
 
     const idUsuario = req.params.id
 
@@ -647,6 +642,44 @@ router.post('/auth', async (req, res) => {
     }
 
 
+})
+
+router.post('/fornecedor', authMiddleware, async (req, res) => {
+
+    const { nomeFornecedor, cnpjFornecedor, telefoneFornecedor, celularFornecedor, enderecoFornecedor, obsFornecedor } = req.body
+
+    const fornecedorNovo = {
+        "nomeFornecedor": nomeFornecedor,
+        "cnpjFornecedor": cnpjFornecedor,
+        "telefoneFornecedor": telefoneFornecedor,
+        "celularFornecedor": celularFornecedor,
+        "enderecoFornecedor": enderecoFornecedor,
+        "obsFornecedor": obsFornecedor
+    }
+
+    try {
+
+        await Fornecedor.create(fornecedorNovo)
+        res.status(201).json({ message: `Fornecedor ${nome} cadastrado!` })
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+})
+
+router.get('/fornecedores', async (req, res) => {
+    try {
+
+        let fornecedores = await Fornecedor.find()
+
+        res.status(200).json(fornecedores)
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
 })
 
 module.exports = router
