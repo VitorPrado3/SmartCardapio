@@ -13,6 +13,7 @@ const JWT_SECRET = 'smartcardapio'
 const SALT_ROUNDS = 10
 const ADMIN_PATHS = [
     '/produto',
+    '/usuario',
     '/usuarios'
 ]
 
@@ -90,7 +91,7 @@ router.post('/produto', authMiddleware, async (req, res) => {
     
 })
 
-router.post('/estoque', async (req, res) => {
+router.post('/estoque', authMiddleware, async (req, res) => {
 
     const { nomeProduto, quantidade, fornecedor } = req.body
 
@@ -142,7 +143,7 @@ router.post('/estoque', async (req, res) => {
     
 })
 
-router.get('/estoque', async (req, res) => {
+router.get('/estoque', authMiddleware, async (req, res) => {
     try {
 
         let produtos = await Estoque.find()
@@ -154,7 +155,7 @@ router.get('/estoque', async (req, res) => {
     }
 })
 
-router.patch('/estoque', async (req, res) => {
+router.patch('/estoque', authMiddleware, async (req, res) => {
 
     const { nomeProduto, quantidadeProduto } = req.body
 
@@ -183,7 +184,7 @@ router.patch('/estoque', async (req, res) => {
 
 })
 
-router.get('/produtos', async (req, res) => {
+router.get('/produtos', authMiddleware, async (req, res) => {
     try {
 
         let produtos = await Produto.find()
@@ -195,7 +196,7 @@ router.get('/produtos', async (req, res) => {
     }
 })
 
-router.get('/produto/:id', async (req, res) => {
+router.get('/produto/:id', authMiddleware, async (req, res) => {
 
     const idProduto = req.params.id
 
@@ -218,7 +219,7 @@ router.get('/produto/:id', async (req, res) => {
 
 })
 
-router.get('/categoria/:categoria', async (req, res) => {
+router.get('/categoria/:categoria', authMiddleware, async (req, res) => {
 
     const categoriaParam = req.params.categoria
 
@@ -241,7 +242,7 @@ router.get('/categoria/:categoria', async (req, res) => {
 
 })
 
-router.patch('/produto/:id', async (req, res) => {
+router.patch('/produto/:id', authMiddleware, async (req, res) => {
 
     const idProduto = req.params.id
     const { nome, valor, categoria, descricao, imagem } = req.body
@@ -279,7 +280,7 @@ router.patch('/produto/:id', async (req, res) => {
 
 })
 
-router.delete('/produto/:id', async (req, res) => {
+router.delete('/produto/:id', authMiddleware, async (req, res) => {
 
     const idProduto = req.params.id
 
@@ -305,7 +306,7 @@ router.delete('/produto/:id', async (req, res) => {
 
 })
 
-router.post('/pedido', async (req, res) => {
+router.post('/pedido', authMiddleware, async (req, res) => {
 
     const { listaProd, mesa, autor } = req.body
 
@@ -348,7 +349,7 @@ router.post('/pedido', async (req, res) => {
 
 })
 
-router.get('/pedidos', async (req, res) => {
+router.get('/pedidos', authMiddleware, async (req, res) => {
     try {
 
         let pedidos = await Pedido.find()
@@ -361,7 +362,7 @@ router.get('/pedidos', async (req, res) => {
     }
 })
 
-router.patch('/cancelarPedido/:id', async (req, res) => {
+router.patch('/cancelarPedido/:id', authMiddleware, async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -390,7 +391,7 @@ router.patch('/cancelarPedido/:id', async (req, res) => {
 
 })
 
-router.patch('/pedidoPronto/:id', async (req, res) => {
+router.patch('/pedidoPronto/:id', authMiddleware, async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -428,18 +429,6 @@ router.patch('/pedidoPronto/:id', async (req, res) => {
         }
     }
 
-    // const list = pedidoAntigo.listaProd
-
-    // list.forEach( async item => {
-    //     const itemAntigo = await Estoque.findOne({ nomeProduto: item}).exec()
-
-    //     const estoque = {
-    //         quantidadeProduto: (itemAntigo.quantidadeProduto - 1)
-    //     }
-
-    //     await Estoque.updateOne({ nomeProduto: item}, estoque)
-    // })
-
     try {
 
         await Pedido.updateOne({ idPedido: idPedido }, pedidoNovo)
@@ -453,7 +442,7 @@ router.patch('/pedidoPronto/:id', async (req, res) => {
 
 })
 
-router.patch('/pedidoFinalizado/:id', async (req, res) => {
+router.patch('/pedidoFinalizado/:id', authMiddleware, async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -482,7 +471,7 @@ router.patch('/pedidoFinalizado/:id', async (req, res) => {
 
 })
 
-router.delete('/pedido/:id', async (req, res) => {
+router.delete('/pedido/:id', authMiddleware, async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -508,7 +497,7 @@ router.delete('/pedido/:id', async (req, res) => {
 
 })
 
-router.post('/usuario', async (req, res) => {
+router.post('/usuario', authMiddleware, async (req, res) => {
 
     const { user, senha, tipo } = req.body
 
@@ -537,7 +526,7 @@ router.post('/usuario', async (req, res) => {
 
 })
 
-router.get('/usuarios', async (req, res) => {
+router.get('/usuarios', authMiddleware, async (req, res) => {
     try {
 
         let usuarios = await Usuario.find()
@@ -550,7 +539,7 @@ router.get('/usuarios', async (req, res) => {
     }
 })
 
-router.get('/usuario/:id', async (req, res) => {
+router.get('/usuario/:id', authMiddleware, async (req, res) => {
 
     const idUsuario = req.params.id
 
@@ -573,7 +562,7 @@ router.get('/usuario/:id', async (req, res) => {
 
 })
 
-router.patch('/usuario/:id', async (req, res) => {
+router.patch('/usuario/:id', authMiddleware, async (req, res) => {
 
     const idUsuario = req.params.id
     const { user, senha, tipo } = req.body
@@ -603,7 +592,7 @@ router.patch('/usuario/:id', async (req, res) => {
 
 })
 
-router.delete('/usuario/:id', async (req, res) => {
+router.delete('/usuario/:id', authMiddleware, async (req, res) => {
 
     const idUsuario = req.params.id
 
