@@ -92,11 +92,14 @@ router.post('/produto', authMiddleware, async (req, res) => {
 
 router.post('/estoque', async (req, res) => {
 
-    const { nomeProduto, quantidade } = req.body
+    const { nomeProduto, quantidade, fornecedor } = req.body
 
     let produto = {
         nomeProduto: nomeProduto,
         quantidadeProduto: quantidade,
+        fornecedor: fornecedor,
+        inclusao: moment().format('DD/MM/YYYY HH:mm:ss'),
+
     }
 
     if (!nomeProduto) {
@@ -106,6 +109,11 @@ router.post('/estoque', async (req, res) => {
 
     if (!quantidade) {
         res.status(400).json({ erro: 'Campo quantidade é requerido' })
+        return
+    }
+
+    if (!fornecedor) {
+        res.status(400).json({ erro: 'Campo fornecedor é requerido' })
         return
     }
 

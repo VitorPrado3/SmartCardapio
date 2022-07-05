@@ -9,7 +9,15 @@ const Estoque = new Schema({
   quantidadeProduto: {
     type: Number,
     required: true
-  }
+  },
+  fornecedor: {
+    type: String,
+    required: true
+  },
+  inclusao: {
+    type: String,
+    required: true
+  },
 })
 
 
