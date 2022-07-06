@@ -2,9 +2,8 @@ const mongoose = require('mongoose')
 Schema = mongoose.Schema;
 
 const Financeiro = new Schema({
-  idPedido: {
-    type: String,
-    required: true
+  idFinanceiro: {
+    type: Number,
   },
   listaPedidos: {
     type: Array,
@@ -17,7 +16,15 @@ const Financeiro = new Schema({
   mesa: {
     type: Number,
     required: true
-  }
+  },
+  autor: {
+    type: String,
+    required: true
+  },
+  dataFinalizacao: {
+    type: Date,
+    required: true
+  },
 })
 
 
