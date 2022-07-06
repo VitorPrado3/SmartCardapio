@@ -682,4 +682,63 @@ router.get('/fornecedores', async (req, res) => {
     }
 })
 
+router.patch('/fornecedor/:id', async (req, res) => {
+
+    const idFornecedor = req.params.id
+    const { nomeFornecedor, cnpjFornecedor, telefoneFornecedor, celularFornecedor, enderecoFornecedor, obsFornecedor } = req.body
+
+    const fornecedorAntigo = await Fornecedor.findOne({ idFornecedor: idFornecedor })
+
+    if (!fornecedorAntigo) {
+        res.status(404).json({ erro: `Fornecedor ${idFornecedor} não encontrado` })
+        return
+    }
+
+    const fornecedorNovo = {
+        nomeFornecedor: nomeFornecedor || fornecedorAntigo.nomeFornecedor,
+        cnpjFornecedor: cnpjFornecedor || fornecedorAntigo.cnpjFornecedor,
+        telefoneFornecedor: telefoneFornecedor || fornecedorAntigo.telefoneFornecedor,
+        celularFornecedor: celularFornecedor || fornecedorAntigo.celularFornecedor,
+        enderecoFornecedor: enderecoFornecedor || fornecedorAntigo.enderecoFornecedor,
+        obsFornecedor: obsFornecedor || fornecedorAntigo.obsFornecedor
+    }
+
+    try {
+
+        await Fornecedor.updateOne({ idFornecedor: idFornecedor }, fornecedorNovo)
+        res.status(200).json(fornecedorNovo)
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+})
+
+router.delete('/fornecedor/:id', async (req, res) => {
+
+    const idFornecedor = req.params.id
+
+    const fornecedor = await Fornecedor.findOne({ idFornecedor: idFornecedor })
+
+    if (!fornecedor) {
+        res.status(404).json({ message: `Fornecedor não encontrado` })
+        return
+    }
+
+    try {
+
+        await Fornecedor.deleteOne({ idFornecedor: idFornecedor })
+
+        res.status(200).json({ fornecedor, message: 'Fornecedor removido' })
+        return
+    } catch (erro) {
+
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+
+})
+
 module.exports = router
