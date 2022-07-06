@@ -25,7 +25,16 @@ const Produto = new Schema({
   imagemProduto: {
     type: String,
     required: false
+  },
+  carrossel: {
+    type: Boolean,
+    required: false
+  },
+  statusProduto: {
+    type: Boolean,
+    required: false
   }
+
 })
 
 Produto.plugin(AutoIncrement, { inc_field: 'idProduto' });

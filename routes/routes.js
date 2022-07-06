@@ -48,14 +48,16 @@ const authMiddleware = (req, res, next) => {
 
 router.post('/produto', authMiddleware, async (req, res) => {
 
-    const { nomeProduto, valorProduto, categoriaProduto, descricaoProduto, imagemProduto } = req.body
+    const { nomeProduto, valorProduto, categoriaProduto, descricaoProduto, imagemProduto, carrossel, statusProduto } = req.body
 
     let produto = {
         nomeProduto: nomeProduto,
         valorProduto: valorProduto,
         categoriaProduto: categoriaProduto,
         descricaoProduto: descricaoProduto,
-        imagemProduto: imagemProduto
+        imagemProduto: imagemProduto,
+        carrossel: carrossel,
+        statusProduto: statusProduto
     }
 
     if (!nomeProduto) {
@@ -246,7 +248,7 @@ router.get('/categoria/:categoria', async (req, res) => {
 router.patch('/produto/:id', authMiddleware, async (req, res) => {
 
     const idProduto = req.params.id
-    const { nome, valor, categoria, descricao, imagem } = req.body
+    const { nomeProduto, valorProduto, categoriaProduto, descricaoProduto, imagemProduto, carrossel, statusProduto } = req.body
 
     const produtoAntigo = await Produto.findOne({ idProduto: idProduto })
 
@@ -256,11 +258,13 @@ router.patch('/produto/:id', authMiddleware, async (req, res) => {
     }
 
     const produtoNovo = {
-        nomeProduto: nome || produtoAntigo.nome,
-        valorProduto: valor || produtoAntigo.valor,
-        categoriaProduto: categoria || produtoAntigo.categoria,
-        descricaoProduto: descricao || produtoAntigo.descricao,
-        imagemProduto: imagem || produtoAntigo.imagem
+        nomeProduto: nomeProduto || produtoAntigo.nomeProduto,
+        valorProduto: valorProduto || produtoAntigo.valorProduto,
+        categoriaProduto: categoriaProduto || produtoAntigo.categoriaProduto,
+        descricaoProduto: descricaoProduto || produtoAntigo.descricaoProduto,
+        imagemProduto: imagemProduto || produtoAntigo.imagemProduto,
+        carrossel: carrossel || produtoAntigo.carrossel,
+        statusProduto: statusProduto || produtoAntigo.statusProduto
     }
 
     try {
