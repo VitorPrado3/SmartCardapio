@@ -11,15 +11,15 @@ const Fornecedor = new Schema({
     required: true
   },
   cnpjFornecedor: {
-    type: Number,
+    type: String,
     required: true
   },
   telefoneFornecedor: {
-    type: Number,
+    type: String,
     required: true
   },
   celularFornecedor: {
-    type: Number,
+    type: String,
     required: true
   },
   enderecoFornecedor: {
