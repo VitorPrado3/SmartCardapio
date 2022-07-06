@@ -169,9 +169,11 @@ router.patch('/estoque', authMiddleware, async (req, res) => {
         return
     }
 
+    const quantidadeInt = parseInt(quantidadeProduto)
+
     const produtoNovo = {
         nomeProduto: nomeProduto || produtoAntigo.nomeProduto,
-        quantidadeProduto: quantidadeProduto + produtoAntigo.quantidadeProduto || produtoAntigo.quantidadeProduto
+        quantidadeProduto: quantidadeInt + produtoAntigo.quantidadeProduto || produtoAntigo.quantidadeProduto
     }
 
     try {
