@@ -8,6 +8,7 @@ const moment = require('moment');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const Estoque = require('../models/Estoque');
+const Financeiro = require('../models/Financeiro');
 moment.locale('pt-br');
 
 const JWT_SECRET = 'smartcardapio'
@@ -745,6 +746,63 @@ router.delete('/fornecedor/:id', async (req, res) => {
     }
 
 
+})
+
+router.post('/financeiro', authMiddleware, async (req, res) => {
+
+    const { listaPedidos, mesa, autor } = req.body
+
+    let pedido = {
+        listaPedidos: listaPedidos,
+        valorTotal: 0,
+        status: "Fechado",
+        mesa: mesa,
+        autor: autor,
+        dataFinalizacao: moment().format('DD/MM/YYYY HH:mm:ss'),
+    }
+
+    if (!listaPedidos) {
+        res.status(400).json({ erro: 'Pedido vazio' })
+        return
+    }
+
+    if (!mesa) {
+        res.status(400).json({ erro: 'Número da mesa é requerido' })
+        return
+    }
+
+    if (!autor) {
+        res.status(400).json({ erro: 'Autor é requerido' })
+        return
+    }
+
+    try {  
+
+        // listaPedidos.forEach( item => {
+        //     listaProd.forEach( produto)
+        // })
+
+        await Financeiro.create(pedido)
+        res.status(201).json({ pedido, message: 'Pedido fechado!' })
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
+
+})
+
+router.get('/financeiro', async (req, res) => {
+    try {
+
+        let pedidos = await Financeiro.find()
+
+        res.status(200).json(pedidos)
+        return
+    } catch (erro) {
+        res.status(500).json({ erro: erro })
+        return
+    }
 })
 
 module.exports = router
