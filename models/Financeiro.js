@@ -28,6 +28,6 @@ const Financeiro = new Schema({
   },
 })
 
-Financeiro.plugin(AutoIncrement, { inc_field: 'ifFinanceiro' });
+Financeiro.plugin(AutoIncrement, { inc_field: 'idFinanceiro' });
 
 module.exports = mongoose.model('Financeiro', Financeiro);
