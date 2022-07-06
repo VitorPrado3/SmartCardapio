@@ -1,0 +1,842 @@
+{
+	"info": {
+		"_postman_id": "cf477e9c-7b5a-4a7a-a06f-6257ead31ca1",
+		"name": "Smart",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17461410"
+	},
+	"item": [
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "criar produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjEsInRpcG8iOiJhZG1pbiIsImlhdCI6MTY1Njk4NTUxMn0.E7syGUS2zoBBm7uW7JpmUst2IGCq6IcCp-m3iFtavTo",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeProduto\": \"Coca-cola lata\",\r\n    \"valorProduto\": \"5\",\r\n    \"descricaoProduto\": \"Coca-cola lata\",\r\n    \"categoriaProduto\": \"bebida\",\r\n    \"imagemProduto\": \"https://www.auau.com.br/image/cache/data/up_system/product-13806/pepsi-1000x1000.jpg\",\r\n    \"carrossel\": true,\r\n    \"statusProduto\": true\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/produto",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"produto"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar produtos",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/produtos",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar produtos [deprecated]",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/produtos",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "criar estoque",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeProduto\": \"Coca-cola\",\r\n    \"quantidade\": 3,\r\n    \"fornecedor\": \"asd\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/estoque",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"estoque"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "adicionar qtd estoque",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjEsInRpcG8iOiJhZG1pbiIsImlhdCI6MTY1Njk5ODkzOH0.EOndoFqgkIMCrfGe7oVbEcN91oV59cJYVSoTYxTZ7jc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeProduto\": \"Coca-cola lata\",\r\n    \"quantidadeProduto\": \"1\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/estoque",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"estoque"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar estoque",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/estoque",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"estoque"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar estoque [deprecated]",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/estoque",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"estoque"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar produto por id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/produto/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"produto",
+								"1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar produto por categoria",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/categoria/bebida",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"categoria",
+								"bebida"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar produto",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjEsInRpcG8iOiJhZG1pbiIsImlhdCI6MTY1Njk5ODkzOH0.EOndoFqgkIMCrfGe7oVbEcN91oV59cJYVSoTYxTZ7jc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"descricaoProduto\": \"Pepsi twist\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/produto/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"produto",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar produto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/produto/3",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"produto",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Pedidos",
+			"item": [
+				{
+					"name": "criar pedido",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjEsInRpcG8iOiJhZG1pbiIsImlhdCI6MTY1Njk5ODkzOH0.EOndoFqgkIMCrfGe7oVbEcN91oV59cJYVSoTYxTZ7jc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"listaProd\": [\r\n        \"Coca-cola lata\",\r\n        \"Pepsi lata\"\r\n    ],\r\n    \"mesa\": \"7\",\r\n    \"autor\": \"Vitor\"\r\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/pedido",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedido"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar pedidos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/pedidos",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedidos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancelar pedido",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"listProd\": [{\r\n        \"teste2\": \"teste2\"\r\n    }],\r\n    \"mesa\": \"4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/cancelarPedido/9",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"cancelarPedido",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido pronto",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/pedidoPronto/17",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedidoPronto",
+								"17"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido pronto [deprecated]",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/pedidoPronto/9",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedidoPronto",
+								"9"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "pedido finalizado",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"listProd\": [{\r\n        \"teste2\": \"teste2\"\r\n    }],\r\n    \"mesa\": \"4\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/pedidoFinalizado/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedidoFinalizado",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar pedido",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/pedido/12",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"pedido",
+								"12"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuário",
+			"item": [
+				{
+					"name": "criar usuario",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjEsInRpcG8iOiJhZG1pbiIsImlhdCI6MTY1Njk4NTQxM30.55rAv7DlJtDzJSe-UVhXcwCUCZlbNiIXlOhf9WApeIQ",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"admin\",\r\n    \"senha\": \"admin\",\r\n    \"tipo\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/usuario",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar usuarios",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/usuarios",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar usuario por id",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/usuario/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario",
+								"1"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": "",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar usuario",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"admin\",\r\n    \"senha\": \"admin\",\r\n    \"tipo\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/usuario/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar usuario",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/usuario/1",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"usuario",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "autenticação de usuário",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"user\": \"admin\",\r\n    \"senha\": \"admin\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/auth",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"auth"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fornecedor",
+			"item": [
+				{
+					"name": "criar fornecedor",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjEsInRpcG8iOiJhZG1pbiIsImlhdCI6MTY1Njk5ODkzOH0.EOndoFqgkIMCrfGe7oVbEcN91oV59cJYVSoTYxTZ7jc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeFornecedor\": \"mercado1\",\r\n    \"cnpjFornecedor\": \"123\",\r\n    \"telefoneFornecedor\": \"999\",\r\n    \"celularFornecedor\": \"999\",\r\n    \"enderecoFornecedor\": \"rua a\",\r\n    \"obsFornecedor\": \"obs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/fornecedor",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"fornecedor"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar fornecedores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/fornecedores",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"fornecedores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar fornecedor",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nomeFornecedor\": \"mercado1\",\r\n    \"cnpjFornecedor\": \"123\",\r\n    \"telefoneFornecedor\": \"999\",\r\n    \"celularFornecedor\": \"999\",\r\n    \"enderecoFornecedor\": \"rua a\",\r\n    \"obsFornecedor\": \"obs\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/fornecedor/4",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"fornecedor",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "deletar fornecedor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/fornecedor/4",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"fornecedor",
+								"4"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Financeiro",
+			"item": [
+				{
+					"name": "Criar registro financeiro",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZFVzZXIiOjEsInRpcG8iOiJhZG1pbiIsImlhdCI6MTY1Njk5ODkzOH0.EOndoFqgkIMCrfGe7oVbEcN91oV59cJYVSoTYxTZ7jc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"listaPedidos\": [\r\n        {\r\n        \"_id\": \"62c5075a3b1d8506a04b1d87\",\r\n        \"listaProd\": [\r\n            \"Coca-cola lata\",\r\n            \"Pepsi lata\"\r\n        ],\r\n        \"mesa\": 7,\r\n        \"status\": \"Pronto\",\r\n        \"criacao\": \"06/07/2022 00:54:02\",\r\n        \"alteracao\": \"06/07/2022 00:54:33\",\r\n        \"autor\": \"Vitor\",\r\n        \"idPedido\": 2,\r\n        \"__v\": 0\r\n    },\r\n    {\r\n        \"_id\": \"62c507db3b1d8506a04b1da4\",\r\n        \"listaProd\": [\r\n            \"H2O 500ml Limoneto\",\r\n            \"H2O 500ml Limão\"\r\n        ],\r\n        \"mesa\": 7,\r\n        \"status\": \"Pronto\",\r\n        \"criacao\": \"06/07/2022 00:56:11\",\r\n        \"alteracao\": \"06/07/2022 00:56:37\",\r\n        \"autor\": \"Vitor\",\r\n        \"idPedido\": 3,\r\n        \"__v\": 0\r\n    }\r\n    ],\r\n    \"mesa\": 7,\r\n    \"autor\": \"Vitor\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/financeiro",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"financeiro"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar financeiro",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:3000/financeiro",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"financeiro"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
