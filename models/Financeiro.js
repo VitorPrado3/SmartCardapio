@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const AutoIncrement = require('mongoose-sequence')(mongoose);
 Schema = mongoose.Schema;
 
 const Financeiro = new Schema({
@@ -27,5 +28,6 @@ const Financeiro = new Schema({
   },
 })
 
+Financeiro.plugin(AutoIncrement, { inc_field: 'ifFinanceiro' });
 
 module.exports = mongoose.model('Financeiro', Financeiro);
