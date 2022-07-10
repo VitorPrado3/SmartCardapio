@@ -598,7 +598,7 @@ router.delete('/usuario/:id', authMiddleware, async (req, res) => {
 
     const idUsuario = req.params.id
 
-    const usuario = await Usuario.findOne({ idUsuario: idUsuario })
+    const usuario = await Usuario.findOne({ idUser: idUsuario })
 
     if (!usuario) {
         res.status(404).json({ message: `Usuário ${idUsuario} não encontrado` })
@@ -607,7 +607,7 @@ router.delete('/usuario/:id', authMiddleware, async (req, res) => {
 
     try {
 
-        await Usuario.deleteOne({ idUsuario: idUsuario })
+        await Usuario.deleteOne({ idUser: idUsuario })
 
         res.status(200).json({ message: `Usuário ${usuario.user} removido` })
         return
