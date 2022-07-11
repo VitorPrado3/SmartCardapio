@@ -16,7 +16,8 @@ const SALT_ROUNDS = 10
 const ADMIN_PATHS = [
     '/produto',
     '/usuario',
-    '/usuarios'
+    '/usuarios',
+    '/fornecedores'
 ]
 
 const ADMIN_TYPE = 'admin'
@@ -633,7 +634,7 @@ router.post('/auth', async (req, res) => {
 
         if (user === usuario.user && bcrypt.compareSync(senha, usuario.senha)) {
             const token = jwt.sign({idUser: usuario.idUser, tipo: usuario.tipo}, JWT_SECRET)
-            res.status(200).json({message: "Ok", accessToken: token})
+            res.status(200).json({message: "Ok", accessToken: token, usuario: user })
             return
         }
 
@@ -778,9 +779,25 @@ router.post('/financeiro', authMiddleware, async (req, res) => {
 
     try {  
 
-        // listaPedidos.forEach( item => {
-        //     listaProd.forEach( produto)
-        // })
+        for (const nomeProduto of arrayProd) {
+            const estoqueAnt = await Estoque.findOne({nomeProduto}).exec()
+            
+            if(!estoqueAnt){
+                res.status(404).json({ message: "Produto não encontrado" })
+                return
+            }
+    
+            const novoEstoque = {
+                quantidadeProduto: estoqueAnt.quantidadeProduto - 1
+            }
+        
+            const result = await Estoque.updateOne({nomeProduto: estoqueAnt.nomeProduto}, novoEstoque)
+    
+            if(!result?.matchedCount){
+                res.status(500).json({ message: "Falha ao atualizar o produto" })
+                return
+            }
+        }
 
         await Financeiro.create(pedido)
         res.status(201).json({ pedido, message: 'Pedido fechado!' })
