@@ -48,7 +48,7 @@ const authMiddleware = (req, res, next) => {
     }
 }
 
-router.post('/produto', authMiddleware, async (req, res) => {
+router.post('/produto', async (req, res) => {
 
     const { nomeProduto, valorProduto, categoriaProduto, descricaoProduto, imagemProduto, carrossel, statusProduto } = req.body
 
@@ -96,7 +96,7 @@ router.post('/produto', authMiddleware, async (req, res) => {
     
 })
 
-router.post('/estoque', authMiddleware, async (req, res) => {
+router.post('/estoque', async (req, res) => {
 
     const { nomeProduto, quantidade, fornecedor } = req.body
 
@@ -128,7 +128,7 @@ router.post('/estoque', authMiddleware, async (req, res) => {
     if(produtoAntigo?._doc){
         
         const novaQuantia = {
-            quantidadeProduto: produtoAntigo._doc.quantidadeProduto + quantidade
+            quantidadeProduto: produtoAntigo._doc.quantidadeProduto + parseInt(quantidade)
         }
 
         await Estoque.updateOne({ nomeProduto: nomeProduto }, novaQuantia)
@@ -160,7 +160,7 @@ router.get('/estoque', async (req, res) => {
     }
 })
 
-router.patch('/estoque', authMiddleware, async (req, res) => {
+router.patch('/estoque', async (req, res) => {
 
     const { nomeProduto, quantidadeProduto } = req.body
 
@@ -203,7 +203,7 @@ router.get('/produtos', async (req, res) => {
     }
 })
 
-router.get('/produto/:id', authMiddleware, async (req, res) => {
+router.get('/produto/:id', async (req, res) => {
 
     const idProduto = req.params.id
 
@@ -249,7 +249,7 @@ router.get('/categoria/:categoria', async (req, res) => {
 
 })
 
-router.patch('/produto/:id', authMiddleware, async (req, res) => {
+router.patch('/produto/:id', async (req, res) => {
 
     const idProduto = req.params.id
     const { nomeProduto, valorProduto, categoriaProduto, descricaoProduto, imagemProduto, carrossel, statusProduto } = req.body
@@ -283,7 +283,7 @@ router.patch('/produto/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.delete('/produto/:id', authMiddleware, async (req, res) => {
+router.delete('/produto/:id', async (req, res) => {
 
     const idProduto = req.params.id
 
@@ -309,7 +309,7 @@ router.delete('/produto/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.post('/pedido', authMiddleware, async (req, res) => {
+router.post('/pedido', async (req, res) => {
 
     const { listaProd, mesa, autor } = req.body
 
@@ -365,7 +365,7 @@ router.get('/pedidos', async (req, res) => {
     }
 })
 
-router.patch('/cancelarPedido/:id', authMiddleware, async (req, res) => {
+router.patch('/cancelarPedido/:id', async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -394,7 +394,7 @@ router.patch('/cancelarPedido/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.patch('/pedidoPronto/:id', authMiddleware, async (req, res) => {
+router.patch('/pedidoPronto/:id', async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -445,7 +445,7 @@ router.patch('/pedidoPronto/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.patch('/pedidoFinalizado/:id', authMiddleware, async (req, res) => {
+router.patch('/pedidoFinalizado/:id', async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -474,7 +474,7 @@ router.patch('/pedidoFinalizado/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.delete('/pedido/:id', authMiddleware, async (req, res) => {
+router.delete('/pedido/:id', async (req, res) => {
 
     const idPedido = req.params.id
 
@@ -500,7 +500,7 @@ router.delete('/pedido/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.post('/usuario', authMiddleware, async (req, res) => {
+router.post('/usuario', async (req, res) => {
 
     const { user, senha, tipo } = req.body
 
@@ -565,7 +565,7 @@ router.get('/usuario/:id', async (req, res) => {
 
 })
 
-router.patch('/usuario/:id', authMiddleware, async (req, res) => {
+router.patch('/usuario/:id', async (req, res) => {
 
     const idUsuario = req.params.id
     const { user, senha, tipo } = req.body
@@ -595,7 +595,7 @@ router.patch('/usuario/:id', authMiddleware, async (req, res) => {
 
 })
 
-router.delete('/usuario/:id', authMiddleware, async (req, res) => {
+router.delete('/usuario/:id', async (req, res) => {
 
     const idUsuario = req.params.id
 
@@ -652,7 +652,7 @@ router.post('/auth', async (req, res) => {
 
 })
 
-router.post('/fornecedor', authMiddleware, async (req, res) => {
+router.post('/fornecedor', async (req, res) => {
 
     const { nomeFornecedor, cnpjFornecedor, telefoneFornecedor, celularFornecedor, enderecoFornecedor, obsFornecedor } = req.body
 
@@ -749,7 +749,7 @@ router.delete('/fornecedor/:id', async (req, res) => {
 
 })
 
-router.post('/financeiro', authMiddleware, async (req, res) => {
+router.post('/financeiro', async (req, res) => {
 
     const { listaPedidos, mesa, autor } = req.body
 
@@ -778,26 +778,6 @@ router.post('/financeiro', authMiddleware, async (req, res) => {
     }
 
     try {  
-
-        for (const nomeProduto of arrayProd) {
-            const estoqueAnt = await Estoque.findOne({nomeProduto}).exec()
-            
-            if(!estoqueAnt){
-                res.status(404).json({ message: "Produto não encontrado" })
-                return
-            }
-    
-            const novoEstoque = {
-                quantidadeProduto: estoqueAnt.quantidadeProduto - 1
-            }
-        
-            const result = await Estoque.updateOne({nomeProduto: estoqueAnt.nomeProduto}, novoEstoque)
-    
-            if(!result?.matchedCount){
-                res.status(500).json({ message: "Falha ao atualizar o produto" })
-                return
-            }
-        }
 
         await Financeiro.create(pedido)
         res.status(201).json({ pedido, message: 'Pedido fechado!' })
